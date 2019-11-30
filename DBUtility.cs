@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using MySql.Data.MySqlClient;
 using System.Data.SQLite;
+using System.Windows.Forms;
 
 namespace Bangla_text_mysql
 {
@@ -74,19 +75,26 @@ namespace Bangla_text_mysql
             var dbCon = DBConnection.Instance();
             dbCon.DatabaseName = "banglatest";
 
-            if (dbCon.IsConnect())
+            try
             {
-                string query = "";
+                if (dbCon.IsConnect())
+                {
+                    string query = "";
 
 #if DB_MYSQL
                 var cmd = new MySqlCommand("", dbCon.Connection);
 #else
-                var cmd = new SQLiteCommand("", dbCon.Connection);
+                    var cmd = new SQLiteCommand("", dbCon.Connection);
 #endif
-                //SetUTF8Mode(cmd);
-                query = "Drop table AyatSearch";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
+                    //SetUTF8Mode(cmd);
+                    query = "Drop table AyatSearch";
+                    cmd.CommandText = query;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             
         }
