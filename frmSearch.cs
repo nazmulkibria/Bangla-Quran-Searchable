@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using Bangla_text_mysql.Core;
 using Bangla_text_mysql.CustomControl;
 using System.Data.SQLite;
+using System.IO;
 
 namespace Bangla_text_mysql
 {
