@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+#if DB_MYSQL
 using MySql.Data;
 using MySql.Data.MySqlClient;
+#else
 using System.Data.SQLite;
+#endif
+
 using System.IO;
 using System.Windows.Forms;
 

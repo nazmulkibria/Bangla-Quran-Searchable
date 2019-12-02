@@ -6,11 +6,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+#if DB_MYSQL
 using MySql.Data.MySqlClient;
+#else
+using System.Data.SQLite;
+#endif
+
 using System.Net;
 using System.Collections.Specialized;
 using System.Threading;
-using System.Data.SQLite;
+
 
 namespace Bangla_text_mysql
 {
@@ -325,13 +331,14 @@ namespace Bangla_text_mysql
 
         }
 
+#if DB_MYSQL
         private void SetUTF8Mode(MySqlCommand cmd)
         {
             string mysql_query2 = "SET NAMES 'utf8'";
             cmd.CommandText = mysql_query2;
             cmd.ExecuteNonQuery();
         }
-
+#endif
         private void InsertAyats(string theContent, int surah_id, int ayat_id)
         {
             var dbCon = DBConnection.Instance();

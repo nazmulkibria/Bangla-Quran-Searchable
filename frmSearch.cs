@@ -6,11 +6,16 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+#if DB_MYSQL
 using MySql.Data.MySqlClient;
+#else
+using System.Data.SQLite;
+#endif
+
 using System.Runtime.InteropServices;
 using Bangla_text_mysql.Core;
 using Bangla_text_mysql.CustomControl;
-using System.Data.SQLite;
 using System.IO;
 
 namespace Bangla_text_mysql

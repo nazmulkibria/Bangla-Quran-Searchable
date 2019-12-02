@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+#if DB_MYSQL
 using MySql.Data.MySqlClient;
+#else
 using System.Data.SQLite;
+#endif
 using System.Windows.Forms;
 
 namespace Bangla_text_mysql
