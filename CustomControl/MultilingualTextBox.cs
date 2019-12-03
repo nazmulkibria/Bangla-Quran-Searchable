@@ -61,6 +61,20 @@ namespace Bangla_text_mysql.CustomControl
             startCaret += _thisMTBox.SelectionLength;
         }
 
+        public void AddArabicHeaderText(string arabicText)
+        {
+            _thisMTBox.AppendText(arabicText);
+            _thisMTBox.SelectionStart = startCaret;
+            _thisMTBox.SelectionLength = arabicText.Length;
+            _thisMTBox.SelectionAlignment = HorizontalAlignment.Center;
+            //_thisMTBox.SelectionFont = new System.Drawing.Font("Simplified Arabic Fixed Regular", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            //_thisMTBox.SelectionFont = new System.Drawing.Font("Sakkal Majalla", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = new System.Drawing.Font("Traditional Arabic", 30.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionColor = Color.Magenta;
+
+            startCaret += _thisMTBox.SelectionLength;
+        }
+
         public void AddBanglaText(string banglaText)
         {
             banglaText = banglaText.Replace("।", "৷");

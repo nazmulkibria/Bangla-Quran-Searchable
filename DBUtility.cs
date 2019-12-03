@@ -8,6 +8,7 @@ using MySql.Data.MySqlClient;
 using System.Data.SQLite;
 #endif
 using System.Windows.Forms;
+using Bangla_text_mysql.Core;
 
 namespace Bangla_text_mysql
 {
@@ -45,6 +46,41 @@ namespace Bangla_text_mysql
             }
 
             return maxAyats;
+        }
+
+        public static OneSurah GetFullSurah(int surah_id, string surahName)
+        {
+            var dbCon = DBConnection.Instance();
+            dbCon.DatabaseName = "banglatest";
+
+            OneSurah surah = new OneSurah() { SurahName = surahName, SurahID = surah_id };
+
+            if (dbCon.IsConnect())
+            {
+                string query = "";
+
+#if DB_MYSQL
+                var cmd = new MySqlCommand(query, dbCon.Connection);
+#else
+                var cmd = new SQLiteCommand(query, dbCon.Connection);
+#endif
+                //SetUTF8Mode(cmd);
+                query = "SELECT  `ayat_id`, `ayat`, `ayat_arabic` FROM `texts`  WHERE `surah_id` = " + surah_id;
+                cmd.CommandText = query;
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int ayat_id = reader.GetInt32(0);
+                    string arabic = reader.GetString(2);
+                    string ayat = reader.GetString(1);
+                    surah.AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = arabic, AyatID = ayat_id });
+                }
+
+                reader.Close();
+            }
+
+            return surah;
         }
 
         public static void CreateVirtualTable()

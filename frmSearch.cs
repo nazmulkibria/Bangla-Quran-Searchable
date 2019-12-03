@@ -30,6 +30,7 @@ namespace Bangla_text_mysql
 
         public List<string> surahList;
         private Dictionary<int, int> surahMaxAyatList;
+        private OneSurah Fatiha = null;
 
         public frmSearch()
         {
@@ -261,16 +262,24 @@ namespace Bangla_text_mysql
             return surahs;
         }
 
-        private string GetSurahHeader(string txt, bool isFirst)
+        private string GetSurahHeader(OneSurah oneSurah, bool isFirst)
         {
             string tt = string.Empty;
 
             if (!isFirst)
                 tt += Environment.NewLine;
 
-            tt += txt + Environment.NewLine;
+            tt += oneSurah.SurahName + Environment.NewLine;
 
             return tt;
+        }
+
+        private string AddBismillah(OneSurah oneSurah)
+        {
+            if(oneSurah.SurahID != 9 && oneSurah.AyatList.Count > 1 && oneSurah.AyatList[0].AyatID == 1)
+                return Fatiha.AyatList[0].Ayat_Arabic + Environment.NewLine;
+
+            return "";
         }
 
         private void bindAyatsFlowPanel(ref List<OneSurah> surahs)
@@ -279,7 +288,11 @@ namespace Bangla_text_mysql
 
             for (int j = 0; j < surahs.Count; j++)
             {
-                mtb.AddBanglaHeaderText(GetSurahHeader(surahs[j].SurahName, j==0));
+                mtb.AddBanglaHeaderText(GetSurahHeader(surahs[j], j==0));
+                string Bismillah = AddBismillah(surahs[j]);
+                
+                if(Bismillah != string.Empty)
+                    mtb.AddArabicHeaderText(Bismillah);
 
                 for (int i = 0; i < surahs[j].AyatList.Count; i++)
                 {
@@ -337,6 +350,7 @@ namespace Bangla_text_mysql
         {
             surahList = LoadSurahList();
             surahMaxAyatList = DBUtility.GetSurahMaxAyatList();
+            Fatiha = DBUtility.GetFullSurah(1, surahList[0]);
             mtb = new MultilingualTextBox(this.txtAyats);
         }
 
