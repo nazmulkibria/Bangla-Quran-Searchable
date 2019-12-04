@@ -15,10 +15,13 @@ namespace Bangla_text_mysql
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
+            
+            //DBUtility.UpdateNoHarakatField();//need once in lifetime
+            
             DBUtility.DropVirtualTable(); 
             DBUtility.CreateVirtualTable();
 
+            //ArabicNormalizer.Test();
             //Application.Run(new frmDataScraper());
             //Application.Run(new frmDataEntry());
             //Application.Run(new frmSurahList());

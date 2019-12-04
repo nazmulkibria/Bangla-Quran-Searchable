@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArabicNormalizer.cs" />
     <Compile Include="AutoFixVowelDisplacement.cs" />
     <Compile Include="AutoInsertAyatOfATag.cs" />
     <Compile Include="Core\OneAyat.cs" />

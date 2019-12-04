@@ -27,6 +27,8 @@ namespace Bangla_text_mysql
             {
                 AutoFixVowelDisplacement f = new AutoFixVowelDisplacement();
                 int res = f.Fix(txtSearchWith.Text, txtFixWith.Text);
+                DBUtility.DropVirtualTable();
+                DBUtility.CreateVirtualTable();
                 MessageBox.Show("Successfully Replaced: "+res+" ayats");
             }
             

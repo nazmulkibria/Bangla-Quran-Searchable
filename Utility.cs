@@ -145,11 +145,16 @@ namespace Bangla_text_mysql
             if (word == string.Empty)
                 return;
 
+            //word = ArabicNormalizer.normalize(word);
+
             Color backup = myRtb.SelectionColor;
             
             int s_start = myRtb.SelectionStart, startIndex = 0, index;
 
-            while ((index = myRtb.Text.IndexOf(word, startIndex)) != -1)
+            //string rtbTxt = ArabicNormalizer.normalize(myRtb.Text);
+            string rtbTxt = myRtb.Text;
+
+            while ((index = rtbTxt.IndexOf(word, startIndex)) != -1)
             {
                 myRtb.Select(index, word.Length);
                 myRtb.SelectionColor = color;

@@ -79,7 +79,7 @@ namespace Bangla_text_mysql.CustomControl
         {
             banglaText = banglaText.Replace("।", "৷");
 
-            _thisMTBox.AppendText( banglaText );
+            _thisMTBox.AppendText(banglaText);
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Left;
@@ -89,9 +89,31 @@ namespace Bangla_text_mysql.CustomControl
             startCaret += _thisMTBox.SelectionLength;
         }
 
+        public void AddSpecialText(string banglaText, bool isArabic = false)
+        {
+            _thisMTBox.AppendText(banglaText);
+            _thisMTBox.SelectionStart = startCaret;
+            _thisMTBox.SelectionLength = banglaText.Length;
+
+
+            if (isArabic)
+            {
+                _thisMTBox.SelectionAlignment = HorizontalAlignment.Right; 
+                _thisMTBox.SelectionFont = new System.Drawing.Font("Traditional Arabic", 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            }
+            else
+            {
+                _thisMTBox.SelectionAlignment = HorizontalAlignment.Left;
+                _thisMTBox.SelectionFont = new System.Drawing.Font("Vrinda", 20.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            }
+            _thisMTBox.SelectionColor = Color.DarkBlue;
+
+            startCaret += _thisMTBox.SelectionLength;
+        }
+
         public void AddArabicText(string arabicText)
         {
-            _thisMTBox.AppendText( arabicText );
+            _thisMTBox.AppendText(arabicText);
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = arabicText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
@@ -107,6 +129,66 @@ namespace Bangla_text_mysql.CustomControl
         {
             _thisMTBox.Text = string.Empty;
             startCaret = 0;
+        }
+
+        public void AddContextMenu()
+        {
+            RichTextBox rtb = _thisMTBox;
+
+            if (rtb.ContextMenuStrip == null)
+            {
+                ContextMenuStrip cms = new ContextMenuStrip()
+                {
+                    ShowImageMargin = false
+                };
+
+                /*ToolStripMenuItem tsmiUndo = new ToolStripMenuItem("Undo");
+                tsmiUndo.Click += (sender, e) => rtb.Undo();
+                cms.Items.Add(tsmiUndo);
+
+                ToolStripMenuItem tsmiRedo = new ToolStripMenuItem("Redo");
+                tsmiRedo.Click += (sender, e) => rtb.Redo();
+                cms.Items.Add(tsmiRedo);
+
+                cms.Items.Add(new ToolStripSeparator());
+
+                ToolStripMenuItem tsmiCut = new ToolStripMenuItem("Cut");
+                tsmiCut.Click += (sender, e) => rtb.Cut();
+                cms.Items.Add(tsmiCut);
+                */
+                ToolStripMenuItem tsmiCopy = new ToolStripMenuItem("Copy");
+                tsmiCopy.Click += (sender, e) => rtb.Copy();
+                cms.Items.Add(tsmiCopy);
+
+                ToolStripMenuItem tsmiPaste = new ToolStripMenuItem("Paste");
+                tsmiPaste.Click += (sender, e) => rtb.Paste();
+                cms.Items.Add(tsmiPaste);
+
+                /*
+                ToolStripMenuItem tsmiDelete = new ToolStripMenuItem("Delete");
+                tsmiDelete.Click += (sender, e) => rtb.SelectedText = "";
+                cms.Items.Add(tsmiDelete);
+
+                cms.Items.Add(new ToolStripSeparator());
+
+                ToolStripMenuItem tsmiSelectAll = new ToolStripMenuItem("Select All");
+                tsmiSelectAll.Click += (sender, e) => rtb.SelectAll();
+                cms.Items.Add(tsmiSelectAll);
+                */
+
+                cms.Opening += (sender, e) =>
+                {
+                    //tsmiUndo.Enabled = !rtb.ReadOnly && rtb.CanUndo;
+                    //tsmiRedo.Enabled = !rtb.ReadOnly && rtb.CanRedo;
+                    //tsmiCut.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
+                    tsmiCopy.Enabled = rtb.SelectionLength > 0;
+                    tsmiPaste.Enabled = !rtb.ReadOnly && Clipboard.ContainsText();
+                    //tsmiDelete.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
+                    //tsmiSelectAll.Enabled = rtb.TextLength > 0 && rtb.SelectionLength < rtb.TextLength;
+                };
+
+                rtb.ContextMenuStrip = cms;
+            }
         }
     }
 }
