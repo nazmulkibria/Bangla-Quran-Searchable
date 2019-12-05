@@ -16,7 +16,8 @@ namespace Bangla_text_mysql
         private static char[] banglaNumbers = { '০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯' };
         private static char[] engNumbers = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
-        private static string arabicNumbers = "٠‎ ١‎ ٢‎ ٣‎ ٤‎ ٥‎ ٦‎ ٧‎ ٨‎ ٩‎";
+        //private static string arabicNumbers = "٠‎ ١‎ ٢‎ ٣‎ ٤‎ ٥‎ ٦‎ ٧‎ ٨‎ ٩‎";
+        private static char[] arabicNumbers = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩' };
 
         private static string vowels = "া ি ী ু ূ ৃ ে ৈ ো ৌ";
 
@@ -33,17 +34,18 @@ namespace Bangla_text_mysql
 
             foreach (char c in arr)
             {
-                if (banglaNumbers.Contains(c) || engNumbers.Contains(c))
+                bool isNumbers = banglaNumbers.Contains(c) || engNumbers.Contains(c) || arabicNumbers.Contains(c);
+ 
+                if (isNumbers)
                     containNumbers = true;
 
-                bool found = banglaNumbers.Contains(c) || engNumbers.Contains(c) || chars.Contains(c);
+                bool found = isNumbers || chars.Contains(c);
 
                 if (!found)
                     return false;
             }
 
             if (!containNumbers) return false;
-
             return true;
         }
 
@@ -88,6 +90,29 @@ namespace Bangla_text_mysql
             return slist;
         }
 
+        public static string ToConvertEnglishNumber(string number)
+        {
+            string outEnglish = string.Empty;
+
+            foreach (char c in number.ToCharArray())
+            {
+                if (banglaNumbers.Contains(c))
+                {
+                    int index = banglaNumbers.ToList().FindIndex(cc => cc == c);
+                    outEnglish += engNumbers[index];
+                }
+                else if (arabicNumbers.Contains(c))
+                {
+                    int index = arabicNumbers.ToList().FindIndex(cc => cc == c);
+                    outEnglish += engNumbers[index];
+                }
+                else
+                    outEnglish += c;
+            }
+
+            return outEnglish;
+        }
+
         public static string ToConvertBanglaNumber(int number)
         {
             string outBangla = string.Empty;
@@ -104,14 +129,14 @@ namespace Bangla_text_mysql
 
         public static string ToConvertArabicNumber(int number)
         {
-            var ar = arabicNumbers.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            //var ar = arabicNumbers.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             string outArabic = string.Empty;
             string english = Convert.ToString(number);
 
             foreach (char c in english.ToCharArray())
             {
                 int n = Convert.ToInt32(c) - 48;
-                outArabic += ar[n];
+                outArabic += arabicNumbers[n];
             }
 
             return outArabic;

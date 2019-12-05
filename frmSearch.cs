@@ -133,6 +133,8 @@ namespace Bangla_text_mysql
             if (loadFullSurah == -1 && string.IsNullOrEmpty(search))
                 return surahs;
 
+            search = Utility.ToConvertEnglishNumber(search);
+
             SpecialSearchParam sp = new SpecialSearchParam();
             bool isSpecial = IsSpecialSearch(search, ref sp);
 
@@ -159,6 +161,7 @@ namespace Bangla_text_mysql
 
                     if (Utility.IsSurahAndAyat(search))
                     {
+                        
                         var list = Utility.ParseSurahAyatSearch(search);
 
                         if (list.Count > 0)
@@ -172,13 +175,8 @@ namespace Bangla_text_mysql
                                 if (morethanone)
                                     query += " OR";
 
-                                if (item.SurahID >= 0)
                                     query += " `surah_id` = " + item.SurahID;
-
-                                if (item.AyatStartID >= 0)
                                     query += " AND `ayat_id` >= " + item.AyatStartID;
-
-                                if (item.AyatEndID >= 0)
                                     query += " AND `ayat_id` <= " + item.AyatEndID;
 
                                 morethanone = true;
