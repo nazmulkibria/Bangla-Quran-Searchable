@@ -15,9 +15,11 @@ namespace Bangla_text_mysql
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
+            //DBUtility.UpdateWithUthmaniScript();//need once in lifetime
             //DBUtility.UpdateNoHarakatField();//need once in lifetime
             
+
             DBUtility.DropVirtualTable(); 
             DBUtility.CreateVirtualTable();
 

@@ -21,21 +21,28 @@ namespace Bangla_text_mysql
         private static string vowels = "া ি ী ু ূ ৃ ে ৈ ো ৌ";
 
         public static bool IsSurahAndAyat(string search)
-        { 
+        {
             var arr = search.ToCharArray();
-            
-            char [] chars = {':','-',' '};
 
-            if (!arr.Contains(chars[0]))
+            char[] chars = { ':', '-', ' ' };
+
+            if (!arr.Contains(chars[0]) || !arr.Contains(chars[1]))
                 return false;
+
+            bool containNumbers = false;
 
             foreach (char c in arr)
             {
+                if (banglaNumbers.Contains(c) || engNumbers.Contains(c))
+                    containNumbers = true;
+
                 bool found = banglaNumbers.Contains(c) || engNumbers.Contains(c) || chars.Contains(c);
-                
+
                 if (!found)
                     return false;
             }
+
+            if (!containNumbers) return false;
 
             return true;
         }
@@ -47,32 +54,35 @@ namespace Bangla_text_mysql
 
             foreach (var s in arr)
             {
-                SearchSurahAyat ss = new SearchSurahAyat() { SurahID=-1,AyatStartID=-1,AyatEndID=-1};
+                SearchSurahAyat ss = new SearchSurahAyat() { SurahID = -1, AyatStartID = -1, AyatEndID = -1 };
 
                 var surahId = s.Split(new[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-                var ayatId = surahId.Length==1? null: surahId[1].Split(new[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
+                var ayatId = surahId.Length == 1 ? null : surahId[1].Split(new[] { "-" }, StringSplitOptions.RemoveEmptyEntries);
 
                 int a = -1;
                 if (surahId.Length > 0)
                 {
-                    Int32.TryParse(surahId[0], out a);
-                    ss.SurahID = a;
+                    if (Int32.TryParse(surahId[0], out a))
+                        ss.SurahID = a;
+
                 }
 
                 a = -1;
-                if (ayatId!=null && ayatId.Length > 0)
+                if (ayatId != null && ayatId.Length > 0)
                 {
-                    Int32.TryParse(ayatId[0], out a);
-                    ss.AyatStartID = a;
+                    if (Int32.TryParse(ayatId[0], out a))
+                        ss.AyatStartID = a;
                 }
 
                 a = -1;
                 if (ayatId != null && ayatId.Length > 1)
                 {
-                    Int32.TryParse(ayatId[1], out a);
-                    ss.AyatEndID = a;
+                    if (Int32.TryParse(ayatId[1], out a))
+                        ss.AyatEndID = a;
                 }
-                slist.Add(ss);
+
+                if (ss.SurahID >= 1 && ss.SurahID <= 114 &&  ss.AyatStartID >= 1 && ss.AyatStartID <= DBUtility.surahMaxAyatList[ss.SurahID] && ss.AyatEndID >= ss.AyatStartID)
+                    slist.Add(ss);
             }
 
             return slist;
@@ -94,7 +104,7 @@ namespace Bangla_text_mysql
 
         public static string ToConvertArabicNumber(int number)
         {
-            var ar = arabicNumbers.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries); 
+            var ar = arabicNumbers.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             string outArabic = string.Empty;
             string english = Convert.ToString(number);
 
@@ -148,7 +158,7 @@ namespace Bangla_text_mysql
             //word = ArabicNormalizer.normalize(word);
 
             Color backup = myRtb.SelectionColor;
-            
+
             int s_start = myRtb.SelectionStart, startIndex = 0, index;
 
             //string rtbTxt = ArabicNormalizer.normalize(myRtb.Text);
@@ -174,7 +184,7 @@ namespace Bangla_text_mysql
             bool isNumeric = int.TryParse(numberStr, out n);
             number = isNumeric ? n : number;
             return isNumeric;
-        
+
         }
     }
 }

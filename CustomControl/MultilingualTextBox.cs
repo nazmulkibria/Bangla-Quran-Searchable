@@ -9,6 +9,11 @@ namespace Bangla_text_mysql.CustomControl
 {
     public class MultilingualTextBox
     {
+        private string ArabicFontName = "Arabic Typesetting";//"Traditional Arabic"
+        private string BanglaFontName = "Vrinda";
+        private Color arabicColor = Color.DarkSlateBlue;
+        private Color banglaColor = Color.Green;
+
         private RichTextBox _thisMTBox;
         private int startCaret;
 
@@ -55,7 +60,7 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Center;
-            _thisMTBox.SelectionFont = new System.Drawing.Font("Vrinda", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             _thisMTBox.SelectionColor = Color.Magenta;
 
             startCaret += _thisMTBox.SelectionLength;
@@ -69,7 +74,7 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Center;
             //_thisMTBox.SelectionFont = new System.Drawing.Font("Simplified Arabic Fixed Regular", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             //_thisMTBox.SelectionFont = new System.Drawing.Font("Sakkal Majalla", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            _thisMTBox.SelectionFont = new System.Drawing.Font("Traditional Arabic", 30.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 30.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             _thisMTBox.SelectionColor = Color.Magenta;
 
             startCaret += _thisMTBox.SelectionLength;
@@ -83,8 +88,8 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Left;
-            _thisMTBox.SelectionFont = new System.Drawing.Font("Vrinda", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            _thisMTBox.SelectionColor = Color.Green;
+            _thisMTBox.SelectionFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionColor = banglaColor;
 
             startCaret += _thisMTBox.SelectionLength;
         }
@@ -98,13 +103,14 @@ namespace Bangla_text_mysql.CustomControl
 
             if (isArabic)
             {
-                _thisMTBox.SelectionAlignment = HorizontalAlignment.Right; 
-                _thisMTBox.SelectionFont = new System.Drawing.Font("Traditional Arabic", 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
+                //Traditional Arabic
+                _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
             else
             {
                 _thisMTBox.SelectionAlignment = HorizontalAlignment.Left;
-                _thisMTBox.SelectionFont = new System.Drawing.Font("Vrinda", 20.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                _thisMTBox.SelectionFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             }
             _thisMTBox.SelectionColor = Color.DarkBlue;
 
@@ -119,8 +125,8 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
             //_thisMTBox.SelectionFont = new System.Drawing.Font("Simplified Arabic Fixed Regular", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             //_thisMTBox.SelectionFont = new System.Drawing.Font("Sakkal Majalla", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            _thisMTBox.SelectionFont = new System.Drawing.Font("Traditional Arabic", 40.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            _thisMTBox.SelectionColor = Color.Red;
+            _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 40.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionColor = arabicColor;
 
             startCaret += _thisMTBox.SelectionLength;
         }

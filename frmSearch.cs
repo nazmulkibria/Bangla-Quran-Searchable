@@ -30,8 +30,7 @@ namespace Bangla_text_mysql
 
         private List<OneSurah> cache_surahs = null;
 
-        public List<string> surahList;
-        private Dictionary<int, int> surahMaxAyatList;
+        public List<string> surahList;        
         private OneSurah Fatiha = null;
 
         public frmSearch()
@@ -113,7 +112,7 @@ namespace Bangla_text_mysql
                         Utility.isInteger(ayat_start, ref asid);
                         sp.StartAyatId = asid;
 
-                        int eid = surahMaxAyatList[sp.SurahID];
+                        int eid = DBUtility.surahMaxAyatList[sp.SurahID];
                         Utility.isInteger(ayat_end, ref eid);
                         sp.EndAyatId = eid;
                     }
@@ -161,53 +160,61 @@ namespace Bangla_text_mysql
                     if (Utility.IsSurahAndAyat(search))
                     {
                         var list = Utility.ParseSurahAyatSearch(search);
-                        query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `AyatSearch`  WHERE ";
 
-                        bool morethanone = false;
-
-                        foreach (var item in list)
+                        if (list.Count > 0)
                         {
-                            if (morethanone)
-                                query += " OR";
+                            query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `AyatSearch`  WHERE ";
 
-                            query += " `surah_id` = " + item.SurahID;
+                            bool morethanone = false;
 
-                            if (item.AyatStartID >= 0)
-                                query += " AND `ayat_id` >= " + item.AyatStartID;
+                            foreach (var item in list)
+                            {
+                                if (morethanone)
+                                    query += " OR";
 
-                            if (item.AyatEndID >= 0)
-                                query += " AND `ayat_id` <= " + item.AyatEndID;
+                                if (item.SurahID >= 0)
+                                    query += " `surah_id` = " + item.SurahID;
 
-                            morethanone = true;
+                                if (item.AyatStartID >= 0)
+                                    query += " AND `ayat_id` >= " + item.AyatStartID;
+
+                                if (item.AyatEndID >= 0)
+                                    query += " AND `ayat_id` <= " + item.AyatEndID;
+
+                                morethanone = true;
+                            }
                         }
                     }
                     else
                         query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `AyatSearch`  WHERE `AyatSearch` MATCH '" + ArabicNormalizer.normalize(search) + "'";
                 }
 
-                cmd.CommandText = query;
-                var reader = cmd.ExecuteReader();
-
-                int lastSurah = -1;
-                while (reader.Read())
+                if (query != string.Empty)
                 {
-                    int surah_id = reader.GetInt32(0);
-                    int ayat_id = reader.GetInt32(1);
-                    string arabic = reader.GetString(3);
-                    string ayat = reader.GetString(2);
+                    cmd.CommandText = query;
+                    var reader = cmd.ExecuteReader();
 
-                    if (lastSurah != surah_id)
+                    int lastSurah = -1;
+                    while (reader.Read())
                     {
-                        OneSurah one = new OneSurah() { SurahName = surahList[surah_id - 1], SurahID = surah_id };
-                        surahs.Add(one);
+                        int surah_id = reader.GetInt32(0);
+                        int ayat_id = reader.GetInt32(1);
+                        string arabic = reader.GetString(3);
+                        string ayat = reader.GetString(2);
+
+                        if (lastSurah != surah_id)
+                        {
+                            OneSurah one = new OneSurah() { SurahName = surahList[surah_id - 1], SurahID = surah_id };
+                            surahs.Add(one);
+                        }
+
+                        surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = arabic, AyatID = ayat_id });
+
+                        lastSurah = surah_id;
                     }
 
-                    surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = arabic, AyatID = ayat_id });
-
-                    lastSurah = surah_id;
+                    reader.Close();
                 }
-
-                reader.Close();
             }
 
             return surahs;
@@ -358,7 +365,7 @@ namespace Bangla_text_mysql
         private void frmSearch_Load(object sender, EventArgs e)
         {
             surahList = LoadSurahList();
-            surahMaxAyatList = DBUtility.GetSurahMaxAyatList();
+            DBUtility.surahMaxAyatList = DBUtility.GetSurahMaxAyatList();
             Fatiha = DBUtility.GetFullSurah(1, surahList[0]);
             mtb = new MultilingualTextBox(this.txtAyats);
         }
