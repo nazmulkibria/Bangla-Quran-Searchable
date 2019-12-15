@@ -20,8 +20,8 @@ namespace Bangla_text_mysql
             //DBUtility.UpdateNoHarakatField();//need once in lifetime
             
 
-            DBUtility.DropVirtualTable(); 
-            DBUtility.CreateVirtualTable();
+            //DBUtility.DropVirtualTable(); 
+            //DBUtility.CreateVirtualTable();
 
             //ArabicNormalizer.Test();
             //Application.Run(new frmDataScraper());

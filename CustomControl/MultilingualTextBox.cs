@@ -96,6 +96,7 @@ namespace Bangla_text_mysql.CustomControl
 
         public void AddSpecialText(string banglaText, bool isArabic = false)
         {
+            
             _thisMTBox.AppendText(banglaText);
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
@@ -103,6 +104,7 @@ namespace Bangla_text_mysql.CustomControl
 
             if (isArabic)
             {
+
                 _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
                 //Traditional Arabic
                 _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

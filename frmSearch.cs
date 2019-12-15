@@ -308,13 +308,23 @@ namespace Bangla_text_mysql
 
                     if (cb_Arabic.Checked)
                     {
-                        mtb.AddSpecialText(Utility.ToConvertArabicNumber(surahs[j].SurahID) + ":" + Utility.ToConvertArabicNumber(ayat.AyatID) + Environment.NewLine, true);
-                        mtb.AddArabicText(ayat.Ayat_Arabic + Environment.NewLine);
+                        //mtb.AddSpecialText(Utility.ToConvertArabicNumber(surahs[j].SurahID) + ":" + Utility.ToConvertArabicNumber(ayat.AyatID) + Environment.NewLine, true);
+                        string ayatArabic = ayat.Ayat_Arabic + "\u06DD" + Utility.ToConvertArabicNumber(ayat.AyatID);
+                        //mtb.AddArabicText(ayatArabic);
+                        //if (cb_Bangla.Checked)
+                            mtb.AddArabicText(ayatArabic + Environment.NewLine);
+                        //else
+                          //  mtb.AddArabicText(ayatArabic);
                     }
+                    
+                    //if (cb_Arabic.Checked && cb_Bangla.Checked)
+                      //  mtb.AddSpecialText(Environment.NewLine);
+
                     if (cb_Bangla.Checked)
                     {
-                        mtb.AddSpecialText(Utility.ToConvertBanglaNumber(surahs[j].SurahID) + ":" + Utility.ToConvertBanglaNumber(ayat.AyatID) + Environment.NewLine);
-                        mtb.AddBanglaText(ayat.Ayat + Environment.NewLine);
+                        //mtb.AddSpecialText(Utility.ToConvertBanglaNumber(surahs[j].SurahID) + ":" + Utility.ToConvertBanglaNumber(ayat.AyatID) + Environment.NewLine);
+                        string ayatBangla = Utility.ToConvertBanglaNumber(ayat.AyatID) + ") "+ ayat.Ayat;
+                        mtb.AddBanglaText(ayatBangla + Environment.NewLine);
                     }
 
                     //mtb.AddSpecialText("______________________________________________________________________________________________" + Environment.NewLine);
