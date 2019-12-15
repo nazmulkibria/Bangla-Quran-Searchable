@@ -309,7 +309,7 @@ namespace Bangla_text_mysql
                     if (cb_Arabic.Checked)
                     {
                         //mtb.AddSpecialText(Utility.ToConvertArabicNumber(surahs[j].SurahID) + ":" + Utility.ToConvertArabicNumber(ayat.AyatID) + Environment.NewLine, true);
-                        string ayatArabic = ayat.Ayat_Arabic + "\u06DD" + Utility.ToConvertArabicNumber(ayat.AyatID);
+                        string ayatArabic = ayat.Ayat_Arabic + " \u06DD" + Utility.ToConvertArabicNumber(ayat.AyatID);
                         //mtb.AddArabicText(ayatArabic);
                         //if (cb_Bangla.Checked)
                             mtb.AddArabicText(ayatArabic + Environment.NewLine);
@@ -486,6 +486,14 @@ namespace Bangla_text_mysql
                 labelInfo.Text = string.Empty;
                 mtb.ClearText();
             }
+        }
+
+        private void linkCopyShare_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string str = mtb.GetText().Trim();
+            
+            if (!str.Equals(string.Empty))
+                Clipboard.SetText(str);
         }
     }
 }

@@ -38,11 +38,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.cb_Arabic = new System.Windows.Forms.CheckBox();
             this.cb_Bangla = new System.Windows.Forms.CheckBox();
+            this.linkCopyShare = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // txtSearch
             // 
-            this.txtSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSearch.Font = new System.Drawing.Font("Arabic Typesetting", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearch.ForeColor = System.Drawing.Color.Crimson;
             this.txtSearch.Location = new System.Drawing.Point(12, 29);
             this.txtSearch.Name = "txtSearch";
@@ -87,11 +88,11 @@
             // labelInfo
             // 
             this.labelInfo.AutoSize = true;
-            this.labelInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelInfo.ForeColor = System.Drawing.Color.Maroon;
+            this.labelInfo.Font = new System.Drawing.Font("Arabic Typesetting", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelInfo.ForeColor = System.Drawing.Color.Goldenrod;
             this.labelInfo.Location = new System.Drawing.Point(819, 36);
             this.labelInfo.Name = "labelInfo";
-            this.labelInfo.Size = new System.Drawing.Size(0, 24);
+            this.labelInfo.Size = new System.Drawing.Size(0, 31);
             this.labelInfo.TabIndex = 17;
             // 
             // linkFixBangla
@@ -117,7 +118,7 @@
             this.txtAyats.Name = "txtAyats";
             this.txtAyats.ReadOnly = true;
             this.txtAyats.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txtAyats.Size = new System.Drawing.Size(869, 394);
+            this.txtAyats.Size = new System.Drawing.Size(1148, 394);
             this.txtAyats.TabIndex = 19;
             this.txtAyats.Text = "";
             this.txtAyats.MouseUp += new System.Windows.Forms.MouseEventHandler(this.txtAyats_MouseUp);
@@ -159,11 +160,24 @@
             this.cb_Bangla.UseVisualStyleBackColor = true;
             this.cb_Bangla.CheckedChanged += new System.EventHandler(this.cb_Bangla_CheckedChanged);
             // 
+            // linkCopyShare
+            // 
+            this.linkCopyShare.AutoSize = true;
+            this.linkCopyShare.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkCopyShare.Location = new System.Drawing.Point(823, 11);
+            this.linkCopyShare.Name = "linkCopyShare";
+            this.linkCopyShare.Size = new System.Drawing.Size(108, 18);
+            this.linkCopyShare.TabIndex = 23;
+            this.linkCopyShare.TabStop = true;
+            this.linkCopyShare.Text = "Copy To Share";
+            this.linkCopyShare.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkCopyShare_LinkClicked);
+            // 
             // frmSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(889, 479);
+            this.ClientSize = new System.Drawing.Size(1168, 479);
+            this.Controls.Add(this.linkCopyShare);
             this.Controls.Add(this.cb_Bangla);
             this.Controls.Add(this.cb_Arabic);
             this.Controls.Add(this.label1);
@@ -199,5 +213,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cb_Arabic;
         private System.Windows.Forms.CheckBox cb_Bangla;
+        private System.Windows.Forms.LinkLabel linkCopyShare;
     }
 }

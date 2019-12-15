@@ -9,8 +9,8 @@ namespace Bangla_text_mysql.CustomControl
 {
     public class MultilingualTextBox
     {
-        private string ArabicFontName = "Arabic Typesetting";//"Traditional Arabic"
-        private string BanglaFontName = "Vrinda";
+        public static string ArabicFontName = "Arabic Typesetting";//"Traditional Arabic"
+        public static string BanglaFontName = "Vrinda";
         private Color arabicColor = Color.DarkSlateBlue;
         private Color banglaColor = Color.Green;
 
@@ -137,6 +137,13 @@ namespace Bangla_text_mysql.CustomControl
         {
             _thisMTBox.Text = string.Empty;
             startCaret = 0;
+        }
+
+        public string GetText()
+        {
+            if (_thisMTBox == null) return string.Empty;
+
+            return _thisMTBox.Text;
         }
 
         public void AddContextMenu()
