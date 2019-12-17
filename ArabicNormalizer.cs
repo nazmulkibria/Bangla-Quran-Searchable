@@ -18,12 +18,54 @@ namespace Bangla_text_mysql
 
         }
 
+        private static string SpecialNormalize(string script)
+        {
+            script = script.Replace("ٱ", "ا");
+            script = script.Replace("أ", "ا");
+            script = script.Replace("إ", "ا");
+            script = script.Replace("آ", "ا");
+            script = script.Replace("\uFE80", "");//isolated hamza 0xFE80
+            script = script.Replace("\u0621", "");//isolated hamza 0x0621
+            script = script.Replace("\u06C3", "\u0629");//0x06C3 0x0629 ta marbuta fixing ...indo to uthmani
+            
+            //script = script.Replace("ي", "ى");
+            //script = script.Replace("ی", "ى");
+
+            script = script.Replace("ى", "ي");
+            script = script.Replace("\u06CC", "ي");
+
+            script = script.Replace("ہ", "ه");
+            script = script.Replace(" ٭ۙ", "");
+            script = script.Replace("ک", "ك");
+            //script = script.Replace("ا", "");
+            
+            return script;
+        }
+
+        public static List<int> AllIndexesOf(string str, char c)
+        {
+            var foundIndexes = new List<int>();
+            for (int i = str.IndexOf(c); i > -1; i = str.IndexOf(c, i + 1))
+            {
+                foundIndexes.Add(i);
+            }
+
+            return foundIndexes;
+        }
+
         /**
          * normalize Method
          * @return String
          */
         public static string normalize(string input)
         {
+
+            input = input.Replace("\uFC5E", "");//ARABIC LIGATURE SHADDA WITH DAMMATAN ISOLATED FORM	ﱞ
+            input = input.Replace("\uFC5F", "");//ARABIC LIGATURE SHADDA WITH KASRATAN ISOLATED FORM	ﱟ
+            input = input.Replace("\uFC60", "");//ARABIC LIGATURE SHADDA WITH FATHA ISOLATED FORM	ﱠ
+            input = input.Replace("\uFC61", "");//ARABIC LIGATURE SHADDA WITH DAMMA ISOLATED FORM	ﱡ
+            input = input.Replace("\uFC62", "");//ARABIC LIGATURE SHADDA WITH KASRA ISOLATED FORM	ﱢ
+            input = input.Replace("\uFC63", "");//ARABIC LIGATURE SHADDA WITH SUPERSCRIPT ALEF ISOLATED FORM
 
             //Remove honorific sign
             input = input.Replace("\u0610", "");//ARABIC SIGN SALLALLAHOU ALAYHE WA SALLAM
@@ -89,7 +131,46 @@ namespace Bangla_text_mysql
             input = input.Replace("\u065D", "");//ARABIC REVERSED DAMMA
             input = input.Replace("\u065E", "");//ARABIC FATHA WITH TWO DOTS
             input = input.Replace("\u065F", "");//ARABIC WAVY HAMZA BELOW
+
+
+
+            //input = input.Replace("\u0670", "");//ARABIC LETTER SUPERSCRIPT ALEF
+            //input = input.Replace("\u0670", "ا");
+
+            
+            input = SpecialNormalize(input);
+
+            List<int> indexes = AllIndexesOf(input, '\u0670');
+
+            if (indexes.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder(input);
+                for (int i = 0; i < indexes.Count; i++)
+                {
+                    int idx = indexes[i];
+                    if (idx + 1 < input.Length)
+                    {
+                        if (idx >= 2 && input.ElementAt(idx + 1) == '\u0647' && input.ElementAt(idx - 1) == '\u0644' && input.ElementAt(idx - 2) == '\u0644')/*Allah word*/ 
+                        {
+                        }
+                        else if (
+                            input.ElementAt(idx + 1) != 'ى' 
+                           )
+                        {
+                            sb[idx] = 'ا';
+                        }
+                    }
+                }
+                input = sb.ToString();
+
+            }
+
             input = input.Replace("\u0670", "");//ARABIC LETTER SUPERSCRIPT ALEF
+
+            input = input.Replace("و ", "و");
+            input = input.Replace("اا", "ا");
+            input = input.Replace("٭","");
+            input = input.Replace("  ", " ");
 
             return input;
         }

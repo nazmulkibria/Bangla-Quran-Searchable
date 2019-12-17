@@ -28,7 +28,10 @@ namespace Bangla_text_mysql
             //Application.Run(new frmDataEntry());
             //Application.Run(new frmSurahList());
             //Application.Run(new frmAutoInsertAyatIndexing());
+            
             Application.Run(new frmSearch());
+            //Application.Run(new frmCompareScripts());
+            
             //Application.Run(new frmTest());
 
             
