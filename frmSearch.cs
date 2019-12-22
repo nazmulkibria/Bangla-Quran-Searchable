@@ -393,6 +393,10 @@ namespace Bangla_text_mysql
             {
                 ShowTagsForIndexing();
             }
+            else
+            {
+                cmbTags.Visible = linkAddIndex.Visible = false;
+            }
         }
 
         private void ShowTagsForIndexing()
@@ -444,6 +448,8 @@ namespace Bangla_text_mysql
 
         private void LoadSpecificSurah(string SurahName, int SurahId)
         {
+            txtSearch.Clear();
+
             labelInfo.Text = "Loading full surah: " + SurahName + " .....";
 
             labelInfo.Update();
@@ -459,12 +465,12 @@ namespace Bangla_text_mysql
         private void linkTags_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             frmTagList f = new frmTagList();
-            f.SelectedTagId = 1;
             if (f.ShowDialog() == DialogResult.OK)
             {
 
                 if (f.SelectedTagId >= 1)
                 {
+
                     LoadATag(f.SelectedTagString, f.SelectedTagId);
                 }
             }
@@ -472,6 +478,8 @@ namespace Bangla_text_mysql
 
         private void LoadATag(string TagName, int TagId)
         {
+            txtSearch.Clear();
+
             labelInfo.Text = "Loading with tag: " + TagName + " .....";
             labelInfo.Update();
 
@@ -550,8 +558,11 @@ namespace Bangla_text_mysql
 
             if (cache_surahs != null && cache_surahs.Count > 0)
             {
-                DB_tag_processor.InsertAyatIndex(cache_surahs, tag);
-                MessageBox.Show("Added/Updated Ayat-Al-Kareemas under this tag:" + tag.tag_bangla, "Successful...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (MessageBox.Show("Do you want to add all the Ayat Al Kareema of the box under the tag: " + tag.tag_bangla + " ?", "Please confirm...", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                {
+                    DB_tag_processor.InsertAyatIndex(cache_surahs, tag);
+                    MessageBox.Show("Added/Updated Ayat-Al-Kareemas under this tag:" + tag.tag_bangla, "Successful...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
 
         }

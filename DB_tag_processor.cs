@@ -17,7 +17,7 @@ namespace Bangla_text_mysql
             dbCon.DatabaseName = "banglatest";
             if (dbCon.IsConnect())
             {
-                string query = "SELECT * FROM tags";
+                string query = "SELECT * FROM tags ORDER BY tag_bangla";
 #if DB_MYSQL
                 var cmd = new MySqlCommand(query, dbCon.Connection);
 #else

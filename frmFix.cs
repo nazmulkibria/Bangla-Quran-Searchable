@@ -21,17 +21,20 @@ namespace Bangla_text_mysql
             if (string.IsNullOrEmpty(txtSearchWith.Text) || string.IsNullOrEmpty(txtFixWith.Text))
                 return;
 
-            DialogResult dialogResult = MessageBox.Show("Are sure you want to update?", "Update", MessageBoxButtons.YesNoCancel);
-            
+            DialogResult dialogResult = MessageBox.Show("Are sure you want to replace " + txtSearchWith.Text + " with " + txtFixWith.Text + "?", "Please confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
             if (dialogResult == DialogResult.Yes)
             {
                 AutoFixVowelDisplacement f = new AutoFixVowelDisplacement();
                 int res = f.Fix(txtSearchWith.Text, txtFixWith.Text);
-                DBUtility.DropVirtualTable();
-                DBUtility.CreateVirtualTable();
-                MessageBox.Show("Successfully Replaced: "+res+" ayats");
+                if (res > 0)
+                {
+                    DBUtility.DropVirtualTable();
+                    DBUtility.CreateVirtualTable();
+                }
+                MessageBox.Show("Successfully Replaced: " + res + " ayats", "Successfully updated...", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            
+
         }
     }
 }

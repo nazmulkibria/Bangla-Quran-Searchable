@@ -28,20 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBoxSurah = new System.Windows.Forms.ListBox();
+            this.listBoxTags = new System.Windows.Forms.ListBox();
             this.btnDone = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBoxSurah
             // 
-            this.listBoxSurah.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxSurah.FormattingEnabled = true;
-            this.listBoxSurah.ItemHeight = 24;
-            this.listBoxSurah.Location = new System.Drawing.Point(12, 13);
-            this.listBoxSurah.Name = "listBoxSurah";
-            this.listBoxSurah.Size = new System.Drawing.Size(527, 604);
-            this.listBoxSurah.TabIndex = 0;
+            this.listBoxTags.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBoxTags.FormattingEnabled = true;
+            this.listBoxTags.ItemHeight = 24;
+            this.listBoxTags.Location = new System.Drawing.Point(12, 13);
+            this.listBoxTags.Name = "listBoxSurah";
+            this.listBoxTags.Size = new System.Drawing.Size(527, 604);
+            this.listBoxTags.TabIndex = 0;
             // 
             // btnDone
             // 
@@ -71,7 +71,7 @@
             this.ClientSize = new System.Drawing.Size(553, 669);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnDone);
-            this.Controls.Add(this.listBoxSurah);
+            this.Controls.Add(this.listBoxTags);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "frmTagList";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -83,7 +83,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBoxSurah;
+        private System.Windows.Forms.ListBox listBoxTags;
         private System.Windows.Forms.Button btnDone;
         private System.Windows.Forms.Button btnCancel;
     }

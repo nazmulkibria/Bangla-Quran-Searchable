@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 #else
 using System.Data.SQLite;
+using Bangla_text_mysql.Core;
 #endif
 
 namespace Bangla_text_mysql
@@ -26,7 +27,7 @@ namespace Bangla_text_mysql
             get { return SelTagStr; }
         }
 
-        private List<string> Tags = new List<string>();
+        private List<Tag> Tags = new List<Tag>();
 
         public frmTagList()
         {
@@ -35,10 +36,10 @@ namespace Bangla_text_mysql
 
         private void btnDone_Click(object sender, EventArgs e)
         {
-            if (listBoxSurah.SelectedIndex >= 0)
+            if (listBoxTags.SelectedIndex >= 0)
             {
-                SelectedTagId = listBoxSurah.SelectedIndex + 1;
-                SelectedTagString = "#"+Tags[listBoxSurah.SelectedIndex];
+                SelectedTagId = Tags[ listBoxTags.SelectedIndex ] .tag_id;
+                SelectedTagString = Tags[listBoxTags.SelectedIndex].tag_bangla;
             }
 
             this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -46,31 +47,13 @@ namespace Bangla_text_mysql
 
         private void LoadTags()
         {
-            listBoxSurah.Items.Clear();
+            listBoxTags.Items.Clear();
             Tags.Clear();
+            Tags.AddRange(DB_tag_processor.GetTags());
 
-            var dbCon = DBConnection.Instance();
-            dbCon.DatabaseName = "banglatest";
-            if (dbCon.IsConnect())
-            {
-                string query = "SELECT * FROM tags";
-#if DB_MYSQL
-                var cmd = new MySqlCommand(query, dbCon.Connection);
-#else
-                var cmd = new SQLiteCommand(query, dbCon.Connection);
-#endif
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    int surah_id = reader.GetInt32(0);
-                    string surah_name = reader.GetString(1);
-                    listBoxSurah.Items.Add(Utility.ToConvertBanglaNumber( surah_id ) + ". #" + surah_name);
-                    Tags.Add(surah_name);
-                }
-                reader.Close();
-            }
+            foreach (var tag in Tags)
+                listBoxTags.Items.Add(tag.tag_bangla);
 
-            //dbCon.Close();
         }
 
         private void AddBlackBorder()
@@ -79,8 +62,8 @@ namespace Bangla_text_mysql
             panel.BackColor = this.BackColor;
             panel.Size = new System.Drawing.Size(this.Size.Width - 2, this.Size.Height - 2);
             panel.Location = new Point(1, 1);
-            this.Controls.Remove(listBoxSurah);
-            panel.Controls.Add(listBoxSurah);
+            this.Controls.Remove(listBoxTags);
+            panel.Controls.Add(listBoxTags);
             this.Controls.Add(panel);
             this.BackColor = Color.Gray;
         }
@@ -88,11 +71,10 @@ namespace Bangla_text_mysql
         private void frmSurahList_Load(object sender, EventArgs e)
         {
             AddBlackBorder();
-
             LoadTags();
 
-            if (SelectedTagId >= 1 && SelectedTagId <= 114)
-                listBoxSurah.SelectedIndex = SelectedTagId - 1;
+            if (listBoxTags.Items.Count > 0)
+                listBoxTags.SelectedIndex = 0;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
