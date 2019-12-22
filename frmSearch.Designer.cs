@@ -170,10 +170,10 @@
             this.linkCopyShare.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkCopyShare.Location = new System.Drawing.Point(475, 16);
             this.linkCopyShare.Name = "linkCopyShare";
-            this.linkCopyShare.Size = new System.Drawing.Size(108, 18);
+            this.linkCopyShare.Size = new System.Drawing.Size(43, 18);
             this.linkCopyShare.TabIndex = 23;
             this.linkCopyShare.TabStop = true;
-            this.linkCopyShare.Text = "Copy To Share";
+            this.linkCopyShare.Text = "Copy";
             this.linkCopyShare.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkCopyShare_LinkClicked);
             // 
             // cmbTags
@@ -196,10 +196,10 @@
             this.linkAddIndex.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkAddIndex.Location = new System.Drawing.Point(872, 16);
             this.linkAddIndex.Name = "linkAddIndex";
-            this.linkAddIndex.Size = new System.Drawing.Size(139, 18);
+            this.linkAddIndex.Size = new System.Drawing.Size(130, 18);
             this.linkAddIndex.TabIndex = 25;
             this.linkAddIndex.TabStop = true;
-            this.linkAddIndex.Text = "Index Search Result";
+            this.linkAddIndex.Text = "Tag Search Result";
             this.linkAddIndex.Visible = false;
             this.linkAddIndex.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkAddIndex_LinkClicked);
             // 

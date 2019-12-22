@@ -558,7 +558,7 @@ namespace Bangla_text_mysql
 
             if (cache_surahs != null && cache_surahs.Count > 0)
             {
-                if (MessageBox.Show("Do you want to add all the Ayat Al Kareema of the box under the tag: " + tag.tag_bangla + " ?", "Please confirm...", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+                if (MessageBox.Show("Do you want all the Ayat Al Kareemas of search result to tag under this tag: " + tag.tag_bangla + " ?", "Please confirm...", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
                 {
                     DB_tag_processor.InsertAyatIndex(cache_surahs, tag);
                     MessageBox.Show("Added/Updated Ayat-Al-Kareemas under this tag:" + tag.tag_bangla, "Successful...", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -17,7 +17,7 @@ namespace Bangla_text_mysql
         {
 
         }
-
+        
         private static string SpecialNormalize(string script)
         {
             script = script.Replace("ٱ", "ا");
