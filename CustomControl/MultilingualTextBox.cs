@@ -4,15 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Bangla_text_mysql.CustomControl
 {
     public class MultilingualTextBox
     {
-        public static string ArabicFontName = "Arabic Typesetting";//"Traditional Arabic"
-        public static string BanglaFontName = "Vrinda";
+        public static string ArabicFontName = "Arabic Typesetting";//"kfgqpc uthman taha naskh";//"Traditional Arabic"
+        public static string BanglaFontName = "Vrinda";//"Shonar Bangla";//"Vrinda";//"kalpurush";//
+
+        private Font ArabicNormalFont = new System.Drawing.Font(ArabicFontName, 40.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        private Font ArabicHeaderFont = new System.Drawing.Font(ArabicFontName, 30.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        private Font ArabicSpecialFont = new System.Drawing.Font(ArabicFontName, 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
+        private Font BanglaNormalFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        private Font BanglaHeaderFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        private Font BanglaSpecialFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
         private Color arabicColor = Color.DarkSlateBlue;
         private Color banglaColor = Color.Green;
+
+        public Action<string> SearchWithText = null;
 
         private RichTextBox _thisMTBox;
         private int startCaret;
@@ -50,20 +62,24 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.Controls.Add(link);
             _thisMTBox.AppendText(link.Text + "   ");
             _thisMTBox.SelectionStart = _thisMTBox.TextLength;
+            //_thisMTBox.ScrollToCaret();
         }
 
         public void AddBanglaHeaderText(string banglaText)
         {
             banglaText = banglaText.Replace("।", "৷");
+            banglaText = banglaText.Replace("_", "-");
 
             _thisMTBox.AppendText(banglaText);
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Center;
-            _thisMTBox.SelectionFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = BanglaHeaderFont;
             _thisMTBox.SelectionColor = Color.Magenta;
 
             startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
         }
 
         public void AddArabicHeaderText(string arabicText)
@@ -72,31 +88,34 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = arabicText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Center;
-            //_thisMTBox.SelectionFont = new System.Drawing.Font("Simplified Arabic Fixed Regular", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            //_thisMTBox.SelectionFont = new System.Drawing.Font("Sakkal Majalla", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 30.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = ArabicHeaderFont;
             _thisMTBox.SelectionColor = Color.Magenta;
 
             startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
         }
 
         public void AddBanglaText(string banglaText)
         {
             banglaText = banglaText.Replace("।", "৷");
+            banglaText = banglaText.Replace("_", "-");
 
             _thisMTBox.AppendText(banglaText);
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Left;
-            _thisMTBox.SelectionFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = BanglaNormalFont;
             _thisMTBox.SelectionColor = banglaColor;
 
             startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
         }
 
         public void AddSpecialText(string banglaText, bool isArabic = false)
         {
-            
+
             _thisMTBox.AppendText(banglaText);
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = banglaText.Length;
@@ -107,16 +126,21 @@ namespace Bangla_text_mysql.CustomControl
 
                 _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
                 //Traditional Arabic
-                _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                _thisMTBox.SelectionFont = ArabicSpecialFont;
+
             }
             else
             {
                 _thisMTBox.SelectionAlignment = HorizontalAlignment.Left;
-                _thisMTBox.SelectionFont = new System.Drawing.Font(BanglaFontName, 20.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                _thisMTBox.SelectionFont = BanglaSpecialFont;
+
             }
+
             _thisMTBox.SelectionColor = Color.DarkBlue;
 
             startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
         }
 
         public void AddArabicText(string arabicText)
@@ -125,13 +149,14 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionStart = startCaret;
             _thisMTBox.SelectionLength = arabicText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
-            //_thisMTBox.SelectionFont = new System.Drawing.Font("Simplified Arabic Fixed Regular", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            //_thisMTBox.SelectionFont = new System.Drawing.Font("Sakkal Majalla", 30.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            _thisMTBox.SelectionFont = new System.Drawing.Font(ArabicFontName, 40.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            _thisMTBox.SelectionFont = ArabicNormalFont;
             _thisMTBox.SelectionColor = arabicColor;
 
             startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
         }
+
 
         public void ClearText()
         {
@@ -175,10 +200,15 @@ namespace Bangla_text_mysql.CustomControl
                 tsmiCopy.Click += (sender, e) => rtb.Copy();
                 cms.Items.Add(tsmiCopy);
 
-                ToolStripMenuItem tsmiPaste = new ToolStripMenuItem("Paste");
-                tsmiPaste.Click += (sender, e) => rtb.Paste();
-                cms.Items.Add(tsmiPaste);
+                //ToolStripMenuItem tsmiPaste = new ToolStripMenuItem("Paste");
+                //tsmiPaste.Click += (sender, e) => rtb.Paste();
+                //cms.Items.Add(tsmiPaste);
 
+                ToolStripMenuItem tsmiSearch = new ToolStripMenuItem("Search");
+                tsmiSearch.Click += (sender, e) => { if (SearchWithText != null) { SearchWithText(rtb.SelectedText); } };
+                cms.Items.Add(tsmiSearch);
+
+                
                 /*
                 ToolStripMenuItem tsmiDelete = new ToolStripMenuItem("Delete");
                 tsmiDelete.Click += (sender, e) => rtb.SelectedText = "";
@@ -196,8 +226,9 @@ namespace Bangla_text_mysql.CustomControl
                     //tsmiUndo.Enabled = !rtb.ReadOnly && rtb.CanUndo;
                     //tsmiRedo.Enabled = !rtb.ReadOnly && rtb.CanRedo;
                     //tsmiCut.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
+                    tsmiSearch.Enabled = rtb.SelectionLength > 0;
                     tsmiCopy.Enabled = rtb.SelectionLength > 0;
-                    tsmiPaste.Enabled = !rtb.ReadOnly && Clipboard.ContainsText();
+                    //tsmiPaste.Enabled = !rtb.ReadOnly && Clipboard.ContainsText();
                     //tsmiDelete.Enabled = !rtb.ReadOnly && rtb.SelectionLength > 0;
                     //tsmiSelectAll.Enabled = rtb.TextLength > 0 && rtb.SelectionLength < rtb.TextLength;
                 };

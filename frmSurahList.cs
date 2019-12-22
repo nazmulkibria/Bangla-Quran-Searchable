@@ -75,6 +75,8 @@ namespace Bangla_text_mysql
 
         private void frmSurahList_Load(object sender, EventArgs e)
         {
+            AddBlackBorder();
+
             LoadSurahs();
 
             if (SelectedSurahId >= 1 && SelectedSurahId <= 114)
@@ -83,9 +85,22 @@ namespace Bangla_text_mysql
             }
         }
 
+        private void AddBlackBorder()
+        {
+            Panel panel = new Panel();
+            panel.BackColor = this.BackColor;
+            panel.Size = new System.Drawing.Size(this.Size.Width - 2, this.Size.Height - 2);
+            panel.Location = new Point(1, 1);
+            this.Controls.Remove(listBoxSurah);
+            panel.Controls.Add(listBoxSurah);
+            this.Controls.Add(panel);
+            this.BackColor = Color.Gray;
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
+
     }
 }

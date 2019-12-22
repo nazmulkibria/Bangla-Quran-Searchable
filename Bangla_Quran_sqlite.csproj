@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>quran_icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,8 +61,10 @@
     <Compile Include="Core\OneSurah.cs" />
     <Compile Include="Core\SearchSurahAyat.cs" />
     <Compile Include="Core\SpecialSearchParam.cs" />
+    <Compile Include="Core\Tag.cs" />
     <Compile Include="CustomControl\MultilingualTextBox.cs" />
     <Compile Include="DBUtility.cs" />
+    <Compile Include="DB_tag_processor.cs" />
     <Compile Include="frmCompareScripts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,7 +181,9 @@
     </Compile>
     <None Include="sqlitedb\MyDatabase.sqlite" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="quran_icon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

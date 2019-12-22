@@ -171,6 +171,7 @@ namespace Bangla_text_mysql
             input = input.Replace("اا", "ا");
             input = input.Replace("٭","");
             input = input.Replace("  ", " ");
+            
 
             return input;
         }

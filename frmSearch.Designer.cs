@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSearch));
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.linkSurah = new System.Windows.Forms.LinkLabel();
@@ -39,21 +40,24 @@
             this.cb_Arabic = new System.Windows.Forms.CheckBox();
             this.cb_Bangla = new System.Windows.Forms.CheckBox();
             this.linkCopyShare = new System.Windows.Forms.LinkLabel();
+            this.cmbTags = new System.Windows.Forms.ComboBox();
+            this.linkAddIndex = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // txtSearch
             // 
             this.txtSearch.Font = new System.Drawing.Font("Arabic Typesetting", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSearch.ForeColor = System.Drawing.Color.Crimson;
-            this.txtSearch.Location = new System.Drawing.Point(12, 29);
+            this.txtSearch.Location = new System.Drawing.Point(10, 71);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Size = new System.Drawing.Size(346, 38);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(364, 29);
+            this.btnSearch.Location = new System.Drawing.Point(362, 71);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(107, 38);
             this.btnSearch.TabIndex = 1;
@@ -65,7 +69,7 @@
             // 
             this.linkSurah.AutoSize = true;
             this.linkSurah.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkSurah.Location = new System.Drawing.Point(478, 37);
+            this.linkSurah.Location = new System.Drawing.Point(476, 79);
             this.linkSurah.Name = "linkSurah";
             this.linkSurah.Size = new System.Drawing.Size(107, 24);
             this.linkSurah.TabIndex = 14;
@@ -77,7 +81,7 @@
             // 
             this.linkTags.AutoSize = true;
             this.linkTags.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkTags.Location = new System.Drawing.Point(592, 36);
+            this.linkTags.Location = new System.Drawing.Point(590, 78);
             this.linkTags.Name = "linkTags";
             this.linkTags.Size = new System.Drawing.Size(99, 24);
             this.linkTags.TabIndex = 16;
@@ -90,7 +94,7 @@
             this.labelInfo.AutoSize = true;
             this.labelInfo.Font = new System.Drawing.Font("Arabic Typesetting", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelInfo.ForeColor = System.Drawing.Color.Goldenrod;
-            this.labelInfo.Location = new System.Drawing.Point(819, 36);
+            this.labelInfo.Location = new System.Drawing.Point(705, 78);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(0, 31);
             this.labelInfo.TabIndex = 17;
@@ -99,7 +103,7 @@
             // 
             this.linkFixBangla.AutoSize = true;
             this.linkFixBangla.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkFixBangla.Location = new System.Drawing.Point(478, 9);
+            this.linkFixBangla.Location = new System.Drawing.Point(476, 51);
             this.linkFixBangla.Name = "linkFixBangla";
             this.linkFixBangla.Size = new System.Drawing.Size(92, 20);
             this.linkFixBangla.TabIndex = 18;
@@ -114,11 +118,11 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.txtAyats.BackColor = System.Drawing.Color.White;
             this.txtAyats.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtAyats.Location = new System.Drawing.Point(8, 73);
+            this.txtAyats.Location = new System.Drawing.Point(8, 116);
             this.txtAyats.Name = "txtAyats";
             this.txtAyats.ReadOnly = true;
             this.txtAyats.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.txtAyats.Size = new System.Drawing.Size(1148, 394);
+            this.txtAyats.Size = new System.Drawing.Size(1148, 351);
             this.txtAyats.TabIndex = 19;
             this.txtAyats.Text = "";
             this.txtAyats.MouseUp += new System.Windows.Forms.MouseEventHandler(this.txtAyats_MouseUp);
@@ -128,7 +132,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label1.Location = new System.Drawing.Point(13, 7);
+            this.label1.Location = new System.Drawing.Point(11, 49);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(379, 16);
             this.label1.TabIndex = 20;
@@ -139,7 +143,7 @@
             this.cb_Arabic.AutoSize = true;
             this.cb_Arabic.Checked = true;
             this.cb_Arabic.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Arabic.Location = new System.Drawing.Point(587, 12);
+            this.cb_Arabic.Location = new System.Drawing.Point(585, 54);
             this.cb_Arabic.Name = "cb_Arabic";
             this.cb_Arabic.Size = new System.Drawing.Size(110, 17);
             this.cb_Arabic.TabIndex = 21;
@@ -152,7 +156,7 @@
             this.cb_Bangla.AutoSize = true;
             this.cb_Bangla.Checked = true;
             this.cb_Bangla.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Bangla.Location = new System.Drawing.Point(700, 13);
+            this.cb_Bangla.Location = new System.Drawing.Point(698, 55);
             this.cb_Bangla.Name = "cb_Bangla";
             this.cb_Bangla.Size = new System.Drawing.Size(113, 17);
             this.cb_Bangla.TabIndex = 22;
@@ -164,7 +168,7 @@
             // 
             this.linkCopyShare.AutoSize = true;
             this.linkCopyShare.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkCopyShare.Location = new System.Drawing.Point(823, 11);
+            this.linkCopyShare.Location = new System.Drawing.Point(475, 16);
             this.linkCopyShare.Name = "linkCopyShare";
             this.linkCopyShare.Size = new System.Drawing.Size(108, 18);
             this.linkCopyShare.TabIndex = 23;
@@ -172,11 +176,40 @@
             this.linkCopyShare.Text = "Copy To Share";
             this.linkCopyShare.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkCopyShare_LinkClicked);
             // 
+            // cmbTags
+            // 
+            this.cmbTags.DisplayMember = "tag_bangla";
+            this.cmbTags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTags.Font = new System.Drawing.Font("Arabic Typesetting", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbTags.FormattingEnabled = true;
+            this.cmbTags.Location = new System.Drawing.Point(591, 10);
+            this.cmbTags.MaxDropDownItems = 10;
+            this.cmbTags.Name = "cmbTags";
+            this.cmbTags.Size = new System.Drawing.Size(275, 31);
+            this.cmbTags.TabIndex = 24;
+            this.cmbTags.ValueMember = "tag_id";
+            this.cmbTags.Visible = false;
+            // 
+            // linkAddIndex
+            // 
+            this.linkAddIndex.AutoSize = true;
+            this.linkAddIndex.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkAddIndex.Location = new System.Drawing.Point(872, 16);
+            this.linkAddIndex.Name = "linkAddIndex";
+            this.linkAddIndex.Size = new System.Drawing.Size(139, 18);
+            this.linkAddIndex.TabIndex = 25;
+            this.linkAddIndex.TabStop = true;
+            this.linkAddIndex.Text = "Index Search Result";
+            this.linkAddIndex.Visible = false;
+            this.linkAddIndex.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkAddIndex_LinkClicked);
+            // 
             // frmSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1168, 479);
+            this.Controls.Add(this.linkAddIndex);
+            this.Controls.Add(this.cmbTags);
             this.Controls.Add(this.linkCopyShare);
             this.Controls.Add(this.cb_Bangla);
             this.Controls.Add(this.cb_Arabic);
@@ -188,12 +221,11 @@
             this.Controls.Add(this.linkSurah);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtSearch);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.MaximizeBox = false;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1184, 517);
             this.Name = "frmSearch";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "frmSearch";
+            this.Text = "Quran -- Searchable in Bangla & Arabic";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmSearch_Load);
             this.ResumeLayout(false);
@@ -214,5 +246,7 @@
         private System.Windows.Forms.CheckBox cb_Arabic;
         private System.Windows.Forms.CheckBox cb_Bangla;
         private System.Windows.Forms.LinkLabel linkCopyShare;
+        private System.Windows.Forms.ComboBox cmbTags;
+        private System.Windows.Forms.LinkLabel linkAddIndex;
     }
 }

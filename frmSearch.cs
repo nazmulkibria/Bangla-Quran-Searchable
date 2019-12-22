@@ -30,7 +30,7 @@ namespace Bangla_text_mysql
 
         private List<OneSurah> cache_surahs = null;
 
-        public List<string> surahList;        
+        public List<string> surahList;
         private OneSurah Fatiha = null;
 
         public frmSearch()
@@ -127,6 +127,8 @@ namespace Bangla_text_mysql
         public List<OneSurah> SearchAyatByText(string search, int loadFullSurah = -1)
         {
             DBUtility.AddEscapeChar(ref search);
+            search = search.Replace("৷", "।");
+            
 
             List<OneSurah> surahs = new List<OneSurah>();
 
@@ -161,7 +163,7 @@ namespace Bangla_text_mysql
 
                     if (Utility.IsSurahAndAyat(search))
                     {
-                        
+
                         var list = Utility.ParseSurahAyatSearch(search);
 
                         if (list.Count > 0)
@@ -175,16 +177,23 @@ namespace Bangla_text_mysql
                                 if (morethanone)
                                     query += " OR";
 
-                                    query += " `surah_id` = " + item.SurahID;
-                                    query += " AND `ayat_id` >= " + item.AyatStartID;
-                                    query += " AND `ayat_id` <= " + item.AyatEndID;
+                                query += " `surah_id` = " + item.SurahID;
+                                query += " AND `ayat_id` >= " + item.AyatStartID;
+                                query += " AND `ayat_id` <= " + item.AyatEndID;
 
                                 morethanone = true;
                             }
                         }
                     }
                     else
-                        query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `AyatSearch`  WHERE `AyatSearch` MATCH '" + ArabicNormalizer.normalize(search) + "'";
+                    {
+                        search = search.Replace("-", "_");
+
+                        if (search.Contains("OR") || search.Contains("AND") || search.Contains("NOT") || search.Contains("+") /*|| search.Contains("-")*/)
+                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic FROM AyatSearch WHERE AyatSearch MATCH '" + ArabicNormalizer.normalize(search) + "' ";
+                        else
+                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic FROM AyatSearch WHERE AyatSearch MATCH '*" + ArabicNormalizer.normalize(search) + "*' ";
+                    }
                 }
 
                 if (query != string.Empty)
@@ -312,18 +321,18 @@ namespace Bangla_text_mysql
                         string ayatArabic = ayat.Ayat_Arabic + " \u06DD" + Utility.ToConvertArabicNumber(ayat.AyatID);
                         //mtb.AddArabicText(ayatArabic);
                         //if (cb_Bangla.Checked)
-                            mtb.AddArabicText(ayatArabic + Environment.NewLine);
+                        mtb.AddArabicText(ayatArabic + Environment.NewLine);
                         //else
-                          //  mtb.AddArabicText(ayatArabic);
+                        //  mtb.AddArabicText(ayatArabic);
                     }
-                    
+
                     //if (cb_Arabic.Checked && cb_Bangla.Checked)
-                      //  mtb.AddSpecialText(Environment.NewLine);
+                    //  mtb.AddSpecialText(Environment.NewLine);
 
                     if (cb_Bangla.Checked)
                     {
                         //mtb.AddSpecialText(Utility.ToConvertBanglaNumber(surahs[j].SurahID) + ":" + Utility.ToConvertBanglaNumber(ayat.AyatID) + Environment.NewLine);
-                        string ayatBangla = Utility.ToConvertBanglaNumber(ayat.AyatID) + ") "+ ayat.Ayat;
+                        string ayatBangla = Utility.ToConvertBanglaNumber(ayat.AyatID) + ") " + ayat.Ayat;
                         mtb.AddBanglaText(ayatBangla + Environment.NewLine);
                     }
 
@@ -349,8 +358,18 @@ namespace Bangla_text_mysql
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            Search(txtSearch.Text);
+        }
 
-            string search = txtSearch.Text;
+        private void SearchByText(string searchKey)
+        {
+            txtSearch.Text = searchKey;
+            txtSearch.Update();
+            btnSearch.PerformClick();
+        }
+
+        private void Search(string search)
+        {
 
             if (string.IsNullOrEmpty(search))
                 return;
@@ -367,7 +386,21 @@ namespace Bangla_text_mysql
 
             Utility.HighlightText(txtAyats, search, Color.Black);
 
-            labelInfo.Text = GetSearchItemCount(ref surahs) + " Ayats found with: [" + search + "]";
+            int ayat_count = GetSearchItemCount(ref surahs);
+            labelInfo.Text = ayat_count + " Ayats found with: [" + search + "]";
+
+            if (ayat_count > 0)
+            {
+                ShowTagsForIndexing();
+            }
+        }
+
+        private void ShowTagsForIndexing()
+        {
+            var binding = new BindingSource();
+            binding.DataSource = DB_tag_processor.GetTags();
+            cmbTags.DataSource = binding.DataSource;
+            cmbTags.Visible = linkAddIndex.Visible = true;
         }
 
         private void frmSearch_Load(object sender, EventArgs e)
@@ -376,6 +409,7 @@ namespace Bangla_text_mysql
             DBUtility.surahMaxAyatList = DBUtility.GetSurahMaxAyatList();
             Fatiha = DBUtility.GetFullSurah(1, surahList[0]);
             mtb = new MultilingualTextBox(this.txtAyats);
+            mtb.SearchWithText = SearchByText;
         }
 
 
@@ -403,18 +437,23 @@ namespace Bangla_text_mysql
 
                 if (f.SelectedSurahId >= 1 && f.SelectedSurahId <= 114)
                 {
-                    labelInfo.Text = "Loading full surah: " + f.SelectedSurahString + " .....";
-
-                    labelInfo.Update();
-
-                    List<OneSurah> surahs = SearchAyatByText(string.Empty, f.SelectedSurahId);
-                    cache_surahs = surahs;
-
-                    bindAyatsFlowPanel(ref surahs);
-
-                    labelInfo.Text = "Total Ayats: " + GetSearchItemCount(ref surahs);
+                    LoadSpecificSurah(f.SelectedSurahString, f.SelectedSurahId);
                 }
             }
+        }
+
+        private void LoadSpecificSurah(string SurahName, int SurahId)
+        {
+            labelInfo.Text = "Loading full surah: " + SurahName + " .....";
+
+            labelInfo.Update();
+
+            List<OneSurah> surahs = SearchAyatByText(string.Empty, SurahId);
+            cache_surahs = surahs;
+
+            bindAyatsFlowPanel(ref surahs);
+
+            labelInfo.Text = "Total Ayats: " + GetSearchItemCount(ref surahs);
         }
 
         private void linkTags_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -426,17 +465,22 @@ namespace Bangla_text_mysql
 
                 if (f.SelectedTagId >= 1)
                 {
-                    labelInfo.Text = "Loading with tag: " + f.SelectedTagString + " .....";
-                    labelInfo.Update();
-
-                    List<OneSurah> surahs = SearchTagID(f.SelectedTagId);
-                    cache_surahs = surahs;
-
-                    bindAyatsFlowPanel(ref surahs);
-
-                    labelInfo.Text = GetSearchItemCount(ref surahs) + " Ayats found with tag: " + f.SelectedTagString + "";
+                    LoadATag(f.SelectedTagString, f.SelectedTagId);
                 }
             }
+        }
+
+        private void LoadATag(string TagName, int TagId)
+        {
+            labelInfo.Text = "Loading with tag: " + TagName + " .....";
+            labelInfo.Update();
+
+            List<OneSurah> surahs = SearchTagID(TagId);
+            cache_surahs = surahs;
+
+            bindAyatsFlowPanel(ref surahs);
+
+            labelInfo.Text = GetSearchItemCount(ref surahs) + " Ayats found with tag: " + TagName + "";
         }
 
         private void linkFixBangla_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -485,15 +529,42 @@ namespace Bangla_text_mysql
 
                 labelInfo.Text = string.Empty;
                 mtb.ClearText();
+                cmbTags.Visible = linkAddIndex.Visible = false;
+
             }
         }
 
         private void linkCopyShare_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string str = mtb.GetText().Trim();
-            
+
             if (!str.Equals(string.Empty))
                 Clipboard.SetText(str);
         }
+
+        private void linkAddIndex_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (cmbTags.SelectedItem == null) return;
+
+            var tag = (cmbTags.SelectedItem as Tag);
+
+            if (cache_surahs != null && cache_surahs.Count > 0)
+            {
+                DB_tag_processor.InsertAyatIndex(cache_surahs, tag);
+                MessageBox.Show("Added/Updated Ayat-Al-Kareemas under this tag:" + tag.tag_bangla, "Successful...", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+        }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                this.btnSearch.PerformClick();
+            }
+        }
+
+
+
     }
 }

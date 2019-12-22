@@ -73,8 +73,22 @@ namespace Bangla_text_mysql
             //dbCon.Close();
         }
 
+        private void AddBlackBorder()
+        {
+            Panel panel = new Panel();
+            panel.BackColor = this.BackColor;
+            panel.Size = new System.Drawing.Size(this.Size.Width - 2, this.Size.Height - 2);
+            panel.Location = new Point(1, 1);
+            this.Controls.Remove(listBoxSurah);
+            panel.Controls.Add(listBoxSurah);
+            this.Controls.Add(panel);
+            this.BackColor = Color.Gray;
+        }
+
         private void frmSurahList_Load(object sender, EventArgs e)
         {
+            AddBlackBorder();
+
             LoadTags();
 
             if (SelectedTagId >= 1 && SelectedTagId <= 114)
