@@ -18,7 +18,8 @@ namespace Bangla_text_mysql
 
             //DBUtility.UpdateWithUthmaniScript();//need once in lifetime
             //DBUtility.UpdateNoHarakatField();//need once in lifetime
-            
+
+            //DBUtility.UpdateWithSahihInteEn();
 
             //DBUtility.DropVirtualTable(); 
             //DBUtility.CreateVirtualTable();

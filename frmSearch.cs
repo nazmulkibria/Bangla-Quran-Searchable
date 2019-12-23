@@ -155,9 +155,9 @@ namespace Bangla_text_mysql
                 //SetUTF8Mode(cmd);
 
                 if (isSpecial)
-                    query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `texts`  WHERE `surah_id` = " + sp.SurahID + " AND `ayat_id` >= " + sp.StartAyatId + " AND `ayat_id` <= " + sp.EndAyatId;
+                    query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic`, `ayat_sahih_en` FROM `texts`  WHERE `surah_id` = " + sp.SurahID + " AND `ayat_id` >= " + sp.StartAyatId + " AND `ayat_id` <= " + sp.EndAyatId;
                 else if (loadFullSurah >= 1)
-                    query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `texts`  WHERE `surah_id` = " + loadFullSurah;
+                    query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic`, `ayat_sahih_en` FROM `texts`  WHERE `surah_id` = " + loadFullSurah;
                 else
                 {    //query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `texts`  WHERE `ayat` LIKE '%" + search + "%' or `ayat_arabic` LIKE '%" + search + "%'";
 
@@ -168,7 +168,7 @@ namespace Bangla_text_mysql
 
                         if (list.Count > 0)
                         {
-                            query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `AyatSearch`  WHERE ";
+                            query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic`, `ayat_sahih_en` FROM `AyatSearch`  WHERE ";
 
                             bool morethanone = false;
 
@@ -190,9 +190,9 @@ namespace Bangla_text_mysql
                         search = search.Replace("-", "_");
 
                         if (search.Contains("OR") || search.Contains("AND") || search.Contains("NOT") || search.Contains("+") /*|| search.Contains("-")*/)
-                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic FROM AyatSearch WHERE AyatSearch MATCH '" + ArabicNormalizer.normalize(search) + "' ";
+                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic, ayat_sahih_en FROM AyatSearch WHERE AyatSearch MATCH '" + ArabicNormalizer.normalize(search) + "' ";
                         else
-                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic FROM AyatSearch WHERE AyatSearch MATCH '*" + ArabicNormalizer.normalize(search) + "*' ";
+                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic, ayat_sahih_en FROM AyatSearch WHERE AyatSearch MATCH '*" + ArabicNormalizer.normalize(search) + "*' ";
                     }
                 }
 
@@ -207,6 +207,7 @@ namespace Bangla_text_mysql
                         int surah_id = reader.GetInt32(0);
                         int ayat_id = reader.GetInt32(1);
                         string arabic = reader.GetString(3);
+                        string sahih_en = reader.GetString(4);
                         string ayat = reader.GetString(2);
 
                         if (lastSurah != surah_id)
@@ -215,7 +216,7 @@ namespace Bangla_text_mysql
                             surahs.Add(one);
                         }
 
-                        surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = arabic, AyatID = ayat_id });
+                        surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = arabic, AyatID = ayat_id, Ayat_En = sahih_en });
 
                         lastSurah = surah_id;
                     }
@@ -248,7 +249,7 @@ namespace Bangla_text_mysql
 #endif
                 //SetUTF8Mode(cmd);
 
-                query = "SELECT T.`surah_id` , T.`ayat_id` , T.`ayat`, T.`ayat_arabic` FROM texts T INNER JOIN  `ayah_indexing` I ON I.`tag_id` = " + tagId + " AND I.`surah_id` = T.`surah_id` AND I.`ayat_id` = T.`ayat_id` ORDER BY  `T`.`surah_id` , T.`ayat_id`";
+                query = "SELECT T.`surah_id` , T.`ayat_id` , T.`ayat`, T.`ayat_arabic`, T.`ayat_sahih_en` FROM texts T INNER JOIN  `ayah_indexing` I ON I.`tag_id` = " + tagId + " AND I.`surah_id` = T.`surah_id` AND I.`ayat_id` = T.`ayat_id` ORDER BY  `T`.`surah_id` , T.`ayat_id`";
 
                 cmd.CommandText = query;
                 var reader = cmd.ExecuteReader();
@@ -261,6 +262,7 @@ namespace Bangla_text_mysql
 
                     string ayat = reader.GetString(2);
                     string ayat_arabic = reader.GetString(3);
+                    string ayat_en = reader.GetString(4);
 
                     if (lastSurah != surah_id)
                     {
@@ -268,7 +270,7 @@ namespace Bangla_text_mysql
                         surahs.Add(one);
                     }
 
-                    surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = ayat_arabic, AyatID = ayat_id });
+                    surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = ayat_arabic, AyatID = ayat_id, Ayat_En = ayat_en });
 
                     lastSurah = surah_id;
                 }
@@ -336,6 +338,11 @@ namespace Bangla_text_mysql
                         mtb.AddBanglaText(ayatBangla + Environment.NewLine);
                     }
 
+                    if (cb_english.Checked)
+                    {
+                        string ayatEnglish = ayat.AyatID + ") " + ayat.Ayat_En;
+                        mtb.AddBanglaText(ayatEnglish + Environment.NewLine);
+                    }
                     //mtb.AddSpecialText("______________________________________________________________________________________________" + Environment.NewLine);
 
                 }
@@ -520,6 +527,15 @@ namespace Bangla_text_mysql
             }
         }
 
+        private void cb_english_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cache_surahs != null)
+            {
+                bindAyatsFlowPanel(ref cache_surahs);
+                Utility.HighlightText(txtAyats, txtSearch.Text, Color.Black);
+            }
+        }
+
         private void txtAyats_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == System.Windows.Forms.MouseButtons.Right)
@@ -574,6 +590,8 @@ namespace Bangla_text_mysql
                 this.btnSearch.PerformClick();
             }
         }
+
+       
 
 
 

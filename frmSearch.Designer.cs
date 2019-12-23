@@ -42,6 +42,11 @@
             this.linkCopyShare = new System.Windows.Forms.LinkLabel();
             this.cmbTags = new System.Windows.Forms.ComboBox();
             this.linkAddIndex = new System.Windows.Forms.LinkLabel();
+            this.cb_english = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtSearch
@@ -132,11 +137,11 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label1.Location = new System.Drawing.Point(11, 49);
+            this.label1.Location = new System.Drawing.Point(8, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(379, 16);
+            this.label1.Size = new System.Drawing.Size(429, 16);
             this.label1.TabIndex = 20;
-            this.label1.Text = "Search with Bangla, Arabic or [SurahID:StartAyatID-EndAyatID]";
+            this.label1.Text = "Search with Arabic, Bangla, English or [SurahID:StartAyatID-EndAyatID]";
             // 
             // cb_Arabic
             // 
@@ -145,9 +150,9 @@
             this.cb_Arabic.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_Arabic.Location = new System.Drawing.Point(585, 54);
             this.cb_Arabic.Name = "cb_Arabic";
-            this.cb_Arabic.Size = new System.Drawing.Size(110, 17);
+            this.cb_Arabic.Size = new System.Drawing.Size(56, 17);
             this.cb_Arabic.TabIndex = 21;
-            this.cb_Arabic.Text = "Show Only Arabic";
+            this.cb_Arabic.Text = "Arabic";
             this.cb_Arabic.UseVisualStyleBackColor = true;
             this.cb_Arabic.CheckedChanged += new System.EventHandler(this.cb_Arabic_CheckedChanged);
             // 
@@ -156,11 +161,11 @@
             this.cb_Bangla.AutoSize = true;
             this.cb_Bangla.Checked = true;
             this.cb_Bangla.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Bangla.Location = new System.Drawing.Point(698, 55);
+            this.cb_Bangla.Location = new System.Drawing.Point(643, 55);
             this.cb_Bangla.Name = "cb_Bangla";
-            this.cb_Bangla.Size = new System.Drawing.Size(113, 17);
+            this.cb_Bangla.Size = new System.Drawing.Size(59, 17);
             this.cb_Bangla.TabIndex = 22;
-            this.cb_Bangla.Text = "Show Only Bangla";
+            this.cb_Bangla.Text = "Bangla";
             this.cb_Bangla.UseVisualStyleBackColor = true;
             this.cb_Bangla.CheckedChanged += new System.EventHandler(this.cb_Bangla_CheckedChanged);
             // 
@@ -203,11 +208,73 @@
             this.linkAddIndex.Visible = false;
             this.linkAddIndex.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkAddIndex_LinkClicked);
             // 
+            // cb_english
+            // 
+            this.cb_english.AutoSize = true;
+            this.cb_english.Checked = true;
+            this.cb_english.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_english.Location = new System.Drawing.Point(703, 55);
+            this.cb_english.Name = "cb_english";
+            this.cb_english.Size = new System.Drawing.Size(60, 17);
+            this.cb_english.TabIndex = 26;
+            this.cb_english.Text = "English";
+            this.cb_english.UseVisualStyleBackColor = true;
+            this.cb_english.CheckedChanged += new System.EventHandler(this.cb_english_CheckedChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.OrangeRed;
+            this.label2.Location = new System.Drawing.Point(11, 44);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(103, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Ex: 1:1-2 3:1-2 4:6-9";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.OrangeRed;
+            this.label3.Location = new System.Drawing.Point(120, 41);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(74, 16);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Ex: parents";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Vrinda", 9F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.OrangeRed;
+            this.label4.Location = new System.Drawing.Point(200, 41);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(73, 17);
+            this.label4.TabIndex = 29;
+            this.label4.Text = "Ex: পিতামাতা";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Arabic Typesetting", 15F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.OrangeRed;
+            this.label5.Location = new System.Drawing.Point(279, 40);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(77, 23);
+            this.label5.TabIndex = 30;
+            this.label5.Text = "Ex: عَدُوٌّ مُّبِينٌ ";
+            // 
             // frmSearch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1168, 479);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cb_english);
             this.Controls.Add(this.linkAddIndex);
             this.Controls.Add(this.cmbTags);
             this.Controls.Add(this.linkCopyShare);
@@ -248,5 +315,10 @@
         private System.Windows.Forms.LinkLabel linkCopyShare;
         private System.Windows.Forms.ComboBox cmbTags;
         private System.Windows.Forms.LinkLabel linkAddIndex;
+        private System.Windows.Forms.CheckBox cb_english;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
     }
 }

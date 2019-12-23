@@ -9,6 +9,7 @@ namespace Bangla_text_mysql.Core
     {
         public string Ayat { get; set; }
         public string Ayat_Arabic { get; set; }
+        public string Ayat_En { get; set; }
         public int AyatID { get; set; }
     }
 }

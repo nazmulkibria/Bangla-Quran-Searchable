@@ -187,9 +187,9 @@ namespace Bangla_text_mysql
             int s_start = myRtb.SelectionStart, startIndex = 0, index;
 
             //string rtbTxt = ArabicNormalizer.normalize(myRtb.Text);
-            string rtbTxt = myRtb.Text;
+            string rtbTxt = myRtb.Text.ToLower();
 
-            while ((index = rtbTxt.IndexOf(word, startIndex)) != -1)
+            while ((index = rtbTxt.IndexOf(word.ToLower(), startIndex)) != -1)
             {
                 myRtb.Select(index, word.Length);
                 myRtb.SelectionColor = color;
