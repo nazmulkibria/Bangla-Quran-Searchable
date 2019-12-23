@@ -292,7 +292,7 @@
             this.MinimumSize = new System.Drawing.Size(1184, 517);
             this.Name = "frmSearch";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quran -- Searchable in Bangla & Arabic";
+            this.Text = "Quran -- Searchable in Arabic, Bangla & English";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmSearch_Load);
             this.ResumeLayout(false);
