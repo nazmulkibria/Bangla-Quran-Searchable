@@ -4,4 +4,4 @@ Full Quran with all the surahs in Bangla & Arabic text. Searchable with arabic, 
 
 **Requirement:**
 
-Sqlite database & Dot net runtime
+Sqlite database & Dot net runtime. Only compitable with windows platform
