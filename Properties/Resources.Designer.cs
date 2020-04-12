@@ -59,5 +59,15 @@ namespace Bangla_text_mysql.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap style10 {
+            get {
+                object obj = ResourceManager.GetObject("style10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

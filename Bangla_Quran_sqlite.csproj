@@ -77,6 +77,12 @@
     <Compile Include="frmFix.Designer.cs">
       <DependentUpon>frmFix.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmReadmode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmReadmode.Designer.cs">
+      <DependentUpon>frmReadmode.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmTagList.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +141,9 @@
     <EmbeddedResource Include="frmFix.resx">
       <DependentUpon>frmFix.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmReadmode.resx">
+      <DependentUpon>frmReadmode.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmTagList.resx">
       <DependentUpon>frmTagList.cs</DependentUpon>
     </EmbeddedResource>
@@ -183,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="quran_icon.ico" />
+    <None Include="Resources\style10.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

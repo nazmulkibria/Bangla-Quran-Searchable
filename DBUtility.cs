@@ -16,7 +16,7 @@ namespace Bangla_text_mysql
     {
         public static Dictionary<int, int> surahMaxAyatList;
 
-        
+        public static List<string> surahList;
         //بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ 
         public static void UpdateWithUthmaniScript()
         {
@@ -12650,6 +12650,196 @@ namespace Bangla_text_mysql
             return surah;
         }
 
+        public static bool IsSpecialSearch(string searchKey, ref SpecialSearchParam sp)
+        {
+            if (searchKey.StartsWith("[") && searchKey.EndsWith("]"))
+            {
+                string txt = searchKey;
+                txt = txt.Replace("[", "");
+                txt = txt.Replace("]", "");
+
+                int index = txt.IndexOf(":");
+
+                if (index < 0)
+                    return false;
+
+                string surah = txt.Substring(0, index);
+
+                txt = txt.Substring(index + 1);
+                index = txt.IndexOf("-");
+
+                if (index < 0)
+                    return false;
+
+                string ayat_start = txt.Substring(0, index);
+
+                string ayat_end = txt.Substring(index + 1);
+
+                sp.SurahID = -1;
+
+                if (!string.IsNullOrEmpty(surah))
+                {
+                    int sid = -1;
+                    Utility.isInteger(surah, ref sid);
+                    sp.SurahID = sid;
+
+                    if (sp.SurahID >= 1 && sp.SurahID <= 114)
+                    {
+                        int asid = 1;
+                        Utility.isInteger(ayat_start, ref asid);
+                        sp.StartAyatId = asid;
+
+                        int eid = DBUtility.surahMaxAyatList[sp.SurahID];
+                        Utility.isInteger(ayat_end, ref eid);
+                        sp.EndAyatId = eid;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public static List<string> LoadSurahList()
+        {
+            List<string> surahList = new List<string>();
+
+            var dbCon = DBConnection.Instance();
+            dbCon.DatabaseName = "banglatest";
+
+            if (dbCon.IsConnect())
+            {
+                string query = "";
+
+#if DB_MYSQL
+                var cmd = new MySqlCommand(query, dbCon.Connection);
+#else
+                var cmd = new SQLiteCommand(query, dbCon.Connection);
+#endif
+                //SetUTF8Mode(cmd);
+                query = "SELECT `surah_id`, `surah_name` FROM `surah`";
+                cmd.CommandText = query;
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    int surah_id = reader.GetInt32(0);
+                    string surah = Utility.ToConvertBanglaNumber(surah_id) + ". " + reader.GetString(1);
+                    surahList.Add(surah);
+                }
+
+                reader.Close();
+            }
+
+            return surahList;
+        }
+
+        public static List<OneSurah> SearchAyatByText(string search, int loadFullSurah = -1)
+        {
+            DBUtility.AddEscapeChar(ref search);
+            search = search.Replace("৷", "।");
+
+
+            List<OneSurah> surahs = new List<OneSurah>();
+
+            if (loadFullSurah == -1 && string.IsNullOrEmpty(search))
+                return surahs;
+
+            search = Utility.ToConvertEnglishNumber(search);
+
+            SpecialSearchParam sp = new SpecialSearchParam();
+            bool isSpecial = DBUtility.IsSpecialSearch(search, ref sp);
+
+            var dbCon = DBConnection.Instance();
+            dbCon.DatabaseName = "banglatest";
+
+            if (dbCon.IsConnect())
+            {
+                string query = "";
+
+#if DB_MYSQL
+                var cmd = new MySqlCommand(query, dbCon.Connection);
+#else
+                var cmd = new SQLiteCommand(query, dbCon.Connection);
+#endif
+                //SetUTF8Mode(cmd);
+
+                if (isSpecial)
+                    query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic`, `ayat_sahih_en` FROM `texts`  WHERE `surah_id` = " + sp.SurahID + " AND `ayat_id` >= " + sp.StartAyatId + " AND `ayat_id` <= " + sp.EndAyatId;
+                else if (loadFullSurah >= 1)
+                    query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic`, `ayat_sahih_en` FROM `texts`  WHERE `surah_id` = " + loadFullSurah;
+                else
+                {    //query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic` FROM `texts`  WHERE `ayat` LIKE '%" + search + "%' or `ayat_arabic` LIKE '%" + search + "%'";
+
+                    if (Utility.IsSurahAndAyat(search))
+                    {
+
+                        var list = Utility.ParseSurahAyatSearch(search);
+
+                        if (list.Count > 0)
+                        {
+                            query = "SELECT `surah_id`, `ayat_id`, `ayat`, `ayat_arabic`, `ayat_sahih_en` FROM `AyatSearch`  WHERE ";
+
+                            bool morethanone = false;
+
+                            foreach (var item in list)
+                            {
+                                if (morethanone)
+                                    query += " OR";
+
+                                query += " `surah_id` = " + item.SurahID;
+                                query += " AND `ayat_id` >= " + item.AyatStartID;
+                                query += " AND `ayat_id` <= " + item.AyatEndID;
+
+                                morethanone = true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        search = search.Replace("-", "_");
+
+                        if (search.Contains("OR") || search.Contains("AND") || search.Contains("NOT") || search.Contains("+") /*|| search.Contains("-")*/)
+                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic, ayat_sahih_en FROM AyatSearch WHERE AyatSearch MATCH '" + ArabicNormalizer.normalize(search) + "' ";
+                        else
+                            query = "SELECT surah_id, ayat_id, ayat, ayat_arabic, ayat_sahih_en FROM AyatSearch WHERE AyatSearch MATCH '*" + ArabicNormalizer.normalize(search) + "*' ";
+                    }
+                }
+
+                if (query != string.Empty)
+                {
+                    cmd.CommandText = query;
+                    var reader = cmd.ExecuteReader();
+
+                    int lastSurah = -1;
+                    while (reader.Read())
+                    {
+                        int surah_id = reader.GetInt32(0);
+                        int ayat_id = reader.GetInt32(1);
+                        string arabic = reader.GetString(3);
+                        string sahih_en = reader.GetString(4);
+                        string ayat = reader.GetString(2);
+
+                        if (lastSurah != surah_id)
+                        {
+                            OneSurah one = new OneSurah() { SurahName = DBUtility.surahList[surah_id - 1], SurahID = surah_id };
+                            surahs.Add(one);
+                        }
+
+                        surahs[surahs.Count - 1].AyatList.Add(new OneAyat() { Ayat = ayat, Ayat_Arabic = arabic, AyatID = ayat_id, Ayat_En = sahih_en });
+
+                        lastSurah = surah_id;
+                    }
+
+                    reader.Close();
+                }
+            }
+
+            return surahs;
+        }
+
+        
         public static void UpdateNoHarakatField()
         {
             var dbCon = DBConnection.Instance();

@@ -89,10 +89,8 @@ namespace Bangla_text_mysql
             */
 
             MultilingualTextBox mtb = new MultilingualTextBox(this.richTextBox1);
-            frmSearch f = new frmSearch();
-            f.surahList = f.LoadSurahList();
-
-            List<OneSurah> surahs = f.SearchAyatByText(string.Empty, 67);
+            DBUtility.surahList = DBUtility.LoadSurahList();
+            List<OneSurah> surahs = DBUtility.SearchAyatByText(string.Empty, 67);
 
             for (int i = 0; i < surahs[0].AyatList.Count; i++)
             {

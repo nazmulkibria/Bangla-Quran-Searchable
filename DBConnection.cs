@@ -85,8 +85,8 @@ namespace Bangla_text_mysql
                 try
                 {
                     string workingDirectory = Environment.CurrentDirectory;
-                    //string dbStr = Directory.GetParent(workingDirectory).Parent.FullName + @"\sqlitedb\MyDatabase.sqlite";
-                    string dbStr = @".\sqlitedb\MyDatabase.sqlite";
+                    string dbStr = Directory.GetParent(workingDirectory).Parent.FullName + @"\sqlitedb\MyDatabase.sqlite";
+                    //string dbStr = @".\sqlitedb\MyDatabase.sqlite";
                     //string connstring = string.Format("Server=127.0.0.1; Charset=utf8; database={0}; UID=root; password=", databaseName);
                     connection = new SQLiteConnection(@"Data Source=" + dbStr + ";Version=3;");
                     //connection = new SQLiteConnection(connstring);

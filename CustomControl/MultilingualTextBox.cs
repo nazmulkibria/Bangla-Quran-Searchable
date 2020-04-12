@@ -13,6 +13,9 @@ namespace Bangla_text_mysql.CustomControl
         public static string ArabicFontName = "Arabic Typesetting";//"kfgqpc uthman taha naskh";//"Traditional Arabic"
         public static string BanglaFontName = "Vrinda";//"Shonar Bangla";//"Vrinda";//"kalpurush";//
 
+        private Font ArabicNormalFontAyatNumber = new System.Drawing.Font(ArabicFontName, 18.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        private Font ArabicNormalFontPage = new System.Drawing.Font(ArabicFontName, 23.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+
         private Font ArabicNormalFont = new System.Drawing.Font(ArabicFontName, 40.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         private Font ArabicHeaderFont = new System.Drawing.Font(ArabicFontName, 30.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         private Font ArabicSpecialFont = new System.Drawing.Font(ArabicFontName, 25.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -150,6 +153,35 @@ namespace Bangla_text_mysql.CustomControl
             _thisMTBox.SelectionLength = arabicText.Length;
             _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
             _thisMTBox.SelectionFont = ArabicNormalFont;
+            _thisMTBox.SelectionColor = arabicColor;
+
+            startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
+        }
+
+        public void AddArabicTextForPage(string arabicText)
+        {
+            _thisMTBox.AppendText(arabicText);
+            _thisMTBox.SelectionStart = startCaret;
+            _thisMTBox.SelectionLength = arabicText.Length;
+            _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
+            _thisMTBox.SelectionFont = ArabicNormalFontPage;
+            _thisMTBox.SelectionColor = arabicColor;
+
+            startCaret += _thisMTBox.SelectionLength;
+
+            //_thisMTBox.ScrollToCaret();
+        }
+
+
+        public void AddArabicTextForAyatNumber(string arabicText)
+        {
+            _thisMTBox.AppendText(arabicText);
+            _thisMTBox.SelectionStart = startCaret;
+            _thisMTBox.SelectionLength = arabicText.Length;
+            _thisMTBox.SelectionAlignment = HorizontalAlignment.Right;
+            _thisMTBox.SelectionFont = ArabicNormalFontAyatNumber;
             _thisMTBox.SelectionColor = arabicColor;
 
             startCaret += _thisMTBox.SelectionLength;
